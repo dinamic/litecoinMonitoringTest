@@ -4,7 +4,10 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
-    <route id="petkanski_litecoin_monitoring_homepage" pattern="/">
-        <default key="_controller">PetkanskiLitecoinMonitoringBundle:Default:index</default>
+    <route id="petkanski_litecoin_monitoring_homepage" pattern="/" methods="GET">
+        <default key="_controller">petkanski_litecoin_monitoring.controller.default:indexAction</default>
+    </route>
+    <route id="petkanski_litecoin_monitoring_workers_by_username" pattern="/user/{username}" methods="GET">
+        <default key="_controller">petkanski_litecoin_monitoring.controller.default:indexAction</default>
     </route>
 </routes>

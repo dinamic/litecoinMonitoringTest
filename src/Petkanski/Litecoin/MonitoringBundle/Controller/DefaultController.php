@@ -6,16 +6,19 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class DefaultController extends Controller
 {
-    public function indexAction()
+    /**
+     *
+     * @var \Petkanski\Litecoin\MonitoringBundle\Repository\WorkerDataRepository
+     */
+    protected $workerDataRepository;
+    
+    public function indexAction($username = null)
     {
-        /* @var $em \Doctrine\ORM\EntityManager */
-        $em = $this->get('doctrine.orm.default_entity_manager');
-
-        /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = $em->getConnection();
-
-        $query = $connection->prepare('select * from worker_data order by id asc');
-        $query->execute();
+        if (is_string($username)) {
+            $query = $this->workerDataRepository->findByUsername($username);
+        } else {
+            $query = $this->workerDataRepository->findAll();
+        }
 
         $workers = array();
         foreach ($query->fetchAll() as $row) {
@@ -39,5 +42,14 @@ class DefaultController extends Controller
         return $this->render('PetkanskiLitecoinMonitoringBundle:Default:index.html.twig', array(
             'workers' => $workers,
         ));
+    }
+    
+    /**
+     * 
+     * @param \Petkanski\Litecoin\MonitoringBundle\Repository\WorkerDataRepository $repository
+     */
+    public function setWorkerDataRepository($repository)
+    {
+        $this->workerDataRepository = $repository;
     }
 }

@@ -17,4 +17,25 @@
         </service>
     </services>
     -->
+    
+    <parameters>
+        <parameter key="petkanski_litecoin_monitoring.controller.default.class">Petkanski\Litecoin\MonitoringBundle\Controller\DefaultController</parameter>
+        <parameter key="petkanski_litecoin_monitoring.repository.worker_data.class">Petkanski\Litecoin\MonitoringBundle\Repository\WorkerDataRepository</parameter>
+    </parameters>
+    
+    <services>
+        <service id="petkanski_litecoin_monitoring.controller.default" class="%petkanski_litecoin_monitoring.controller.default.class%">
+            <call method="setWorkerDataRepository">
+                <argument type="service" id="petkanski_litecoin_monitoring.repository.worker_data"/>
+            </call>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+        <service id="petkanski_litecoin_monitoring.repository.worker_data" class="%petkanski_litecoin_monitoring.repository.worker_data.class%">
+            <call method="setConnection">
+                <argument type="service" id="doctrine.dbal.default_connection"/>
+            </call>
+        </service>
+    </services>
 </container>
