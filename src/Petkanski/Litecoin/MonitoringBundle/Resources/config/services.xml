@@ -21,6 +21,8 @@
     <parameters>
         <parameter key="petkanski_litecoin_monitoring.controller.default.class">Petkanski\Litecoin\MonitoringBundle\Controller\DefaultController</parameter>
         <parameter key="petkanski_litecoin_monitoring.repository.worker_data.class">Petkanski\Litecoin\MonitoringBundle\Repository\WorkerDataRepository</parameter>
+        <parameter key="petkanski_litecoin_monitoring.repository.user.class">Petkanski\Litecoin\MonitoringBundle\Repository\UserRepository</parameter>
+        <parameter key="petkanski_litecoin_monitoring.menu.builder.class">Petkanski\Litecoin\MonitoringBundle\Menu\MenuBuilder</parameter>
     </parameters>
     
     <services>
@@ -36,6 +38,19 @@
             <call method="setConnection">
                 <argument type="service" id="doctrine.dbal.default_connection"/>
             </call>
+        </service>
+        <service id="petkanski_litecoin_monitoring.repository.user" class="%petkanski_litecoin_monitoring.repository.user.class%">
+            <call method="setConnection">
+                <argument type="service" id="doctrine.dbal.default_connection"/>
+            </call>
+        </service>
+        <service id="petkanski_litecoin_monitoring.menu.builder" class="%petkanski_litecoin_monitoring.menu.builder.class%">
+            <argument type="service" id="knp_menu.factory"/>
+        </service>
+        <service id="petkanski_litecoin_monitoring.menu.worker_by_username" class="Knp\Menu\MenuItem" factory-service="petkanski_litecoin_monitoring.menu.builder" factory-method="createWorkerByUsernameMenu" scope="request">
+            <argument type="service" id="request"/>
+            <argument type="service" id="petkanski_litecoin_monitoring.repository.user"/>
+            <tag name="knp_menu.menu" alias="worker_by_username"/>
         </service>
     </services>
 </container>
