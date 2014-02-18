@@ -1,0 +1,52 @@
+{% extends 'PetkanskiLitecoinMonitoringBundle::layout.html.twig' %}
+
+{% block content %}
+    <div class="row">
+        {% include 'PetkanskiLitecoinMonitoringBundle::sidebar.html.twig' %}
+
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <h1 class="page-header">Dashboard</h1>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="chartContainer" style="height: 700px; width: 100%;"></div>
+                </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var chart = new CanvasJS.Chart("chartContainer",
+            {
+                zoomEnabled: true,
+                panEnabled: true,
+                axisY: {
+                    includeZero: false
+                },
+                title:{
+                    text: "Litecoin miner stats"
+                },
+                data: data
+            });
+
+            chart.render();
+        });
+
+        var data = [];
+        var dateTime = new Date();
+        
+        {% for worker in workers %}
+        
+        data.push({
+            type: 'line',
+            dataPoints: [{% for key,stat in worker.stats %}{ x: new Date({{ stat.timestamp }} * 1000), y: {{ stat.hashrate}} }{% if not loop.last %},{% endif %}{% endfor %}]
+        });
+        {% endfor %}
+
+    </script>
+{% endblock %}

@@ -1,0 +1,4 @@
+petkanski_litecoin_monitoring:
+    resource: "@PetkanskiLitecoinMonitoringBundle/Resources/config/routing.xml"
+    prefix:   /litecoin
+
