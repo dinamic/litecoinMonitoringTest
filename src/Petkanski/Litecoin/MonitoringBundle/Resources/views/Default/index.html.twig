@@ -31,6 +31,13 @@
                 title:{
                     text: "Litecoin miner stats"
                 },
+                legend:{
+                    fontSize: 14,
+                    fontFamily: "tamoha",
+                    fontColor: "Sienna",
+                    horizontalAlign: "right",
+                    verticalAlign: "center"
+                },
                 data: data
             });
 
@@ -44,6 +51,8 @@
         
         data.push({
             type: 'line',
+            showInLegend: true,
+            legendText: "{{ worker.username|escape("js") }}",
             dataPoints: [{% for key,stat in worker.stats %}{ x: new Date({{ stat.timestamp }} * 1000), y: {{ stat.hashrate}} }{% if not loop.last %},{% endif %}{% endfor %}]
         });
         {% endfor %}
