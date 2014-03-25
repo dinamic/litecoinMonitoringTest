@@ -21,6 +21,8 @@
 {% block javascript %}
     <script type="text/javascript">
         $(document).ready(function(){
+            var title = "{{ dateFrom|date() }} - {{ "now"|date() }}";
+
             var chart = new CanvasJS.Chart("chartContainer",
             {
                 zoomEnabled: true,
@@ -29,7 +31,7 @@
                     includeZero: false
                 },
                 title:{
-                    text: "Litecoin miner stats"
+                    text: title
                 },
                 legend:{
                     fontSize: 14,

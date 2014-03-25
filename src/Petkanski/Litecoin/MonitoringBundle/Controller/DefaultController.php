@@ -16,9 +16,14 @@ class DefaultController extends Controller
     public function indexAction($username = null)
     {
         $criteria = new WorkerDataCriteria();
+        $filters = array(
+            'username' => null,
+            'hour'     => null,
+        );
         
         if (is_string($username)) {
             $criteria->setUsername($username);
+            $filters['username'] = $username;
         }
 
         $hourRange = $this->getRequest()->query->get('hours');
@@ -29,6 +34,8 @@ class DefaultController extends Controller
         }
         
         $criteria->setHourRange($hourRange);
+        $filters['hour'] = $hourRange;
+        $dateFrom = new \DateTime('-'. $hourRange .' hours');
 
         $query = $this->workerDataRepository->matchCriteria($criteria);
 
@@ -52,7 +59,9 @@ class DefaultController extends Controller
         }
 
         return $this->render('PetkanskiLitecoinMonitoringBundle:Default:index.html.twig', array(
-            'workers' => $workers,
+            'workers'  => $workers,
+            'filter'   => $filters,
+            'dateFrom' => $dateFrom,
         ));
     }
     
