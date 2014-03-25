@@ -3,7 +3,7 @@
 namespace Petkanski\Litecoin\MonitoringBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Petkanski\Litecoin\MonitoringBundle\Repository\Criteria\WorkerDataCriteria;s
+use Petkanski\Litecoin\MonitoringBundle\Repository\Criteria\WorkerDataCriteria;
 
 class DefaultController extends Controller
 {
