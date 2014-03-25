@@ -3,6 +3,7 @@
 namespace Petkanski\Litecoin\MonitoringBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Petkanski\Litecoin\MonitoringBundle\Repository\Criteria\WorkerDataCriteria;s
 
 class DefaultController extends Controller
 {
@@ -14,11 +15,22 @@ class DefaultController extends Controller
     
     public function indexAction($username = null)
     {
+        $criteria = new WorkerDataCriteria();
+        
         if (is_string($username)) {
-            $query = $this->workerDataRepository->findByUsername($username);
-        } else {
-            $query = $this->workerDataRepository->findAll();
+            $criteria->setUsername($username);
         }
+
+        $hourRange = $this->getRequest()->query->get('hours');
+
+        // enforcing default value and min/max value range
+        if (null === $hourRange || !ctype_digit($hourRange) || $hourRange > 48 || $hourRange < 1) {
+            $hourRange = 24;
+        }
+        
+        $criteria->setHourRange($hourRange);
+
+        $query = $this->workerDataRepository->matchCriteria($criteria);
 
         $workers = array();
         foreach ($query->fetchAll() as $row) {

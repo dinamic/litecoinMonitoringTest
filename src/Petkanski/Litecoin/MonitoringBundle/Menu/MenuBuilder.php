@@ -4,6 +4,7 @@ namespace Petkanski\Litecoin\MonitoringBundle\Menu;
 
 use Symfony\Component\HttpFoundation\Request;
 use Knp\Menu\FactoryInterface;
+use Petkanski\Litecoin\MonitoringBundle\Repository\Criteria\UserCriteria;
 use Petkanski\Litecoin\MonitoringBundle\Repository\UserRepository;
 
 class MenuBuilder
@@ -33,11 +34,17 @@ class MenuBuilder
         $item->setCurrent(true);
         
         $menu->addChild($item);
-        
-        $query = $userRepository->findAll();
+
+        $criteria = new UserCriteria;
+        $query = $userRepository->matchCriteria($criteria);
         
         foreach ($query->fetchAll() as $user) {
-            $menu->addChild($user['username'], array('route' => 'petkanski_litecoin_monitoring_homepage'));
+            $menu->addChild($user['username'], array(
+                'route' => 'petkanski_litecoin_monitoring_workers_by_username',
+                'routeParameters' => array(
+                    'username' => $user['username'],
+                ),
+            ));
         }
         
         return $menu;
